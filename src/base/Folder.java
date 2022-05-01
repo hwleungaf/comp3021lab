@@ -1,10 +1,7 @@
 package base;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
-import java.util.Collections;
+import java.util.*;
 
 public class Folder implements Comparable<Folder>, Serializable{
 	private ArrayList<Note>notes;
@@ -69,26 +66,28 @@ public class Folder implements Comparable<Folder>, Serializable{
 		ArrayList<String> searchNames = new ArrayList<String>();
 		ArrayList<String> searchOrNames = new ArrayList<String>();
 		for (int i = 0; i < tokens.length-1; i++) {
-			if (tokens[i+1]. equalsIgnoreCase("or") || tokens[i+1].equals("OR") ) {
-				searchOrNames.add(tokens[i]);
-				searchOrNames.add(tokens[i+2]);
+			if (tokens[i+1]. equalsIgnoreCase("or")) {
+				searchOrNames.add(tokens[i].toLowerCase());
+				searchOrNames.add(tokens[i+2].toLowerCase());
 				i += 2;
 			}
 			else {
-				searchNames.add(tokens[i]);
+				searchNames.add(tokens[i].toLowerCase());
 			}
 		}
+		if (tokens.length == 1)
+			searchNames.add(tokens[0].toLowerCase());
 		
 		for (Note o : this.notes) {
 			boolean matched = true;
 			boolean orMatched = true;
 			
 			for (String words : searchNames) {
-				if ( o.getTitle().indexOf(words) == -1 ) {
+				if ( o.getTitle().toLowerCase().indexOf(words) == -1 ) {
 					matched = false;
 				}
 				if (o instanceof TextNote) {
-					if ( ((TextNote) o).getContent().indexOf(words) != -1) {
+					if ( ((TextNote) o).getContent().toLowerCase().indexOf(words) != -1) {
 						matched = true;
 					}
 				}
